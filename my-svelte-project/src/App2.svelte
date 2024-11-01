@@ -1,4 +1,20 @@
 <script>
+	// 動画速度100倍のシェルスクリプトのワンライナー
+	// 時間対応表 10時間の100倍速は6分。5時間の動画を3分にしたい場合の倍速も100倍
+	// 18時間の動画を3分にしたい場合の倍速は360倍
+	// ffmpeg -i input.mov -filter_complex "[0:v]setpts=PTS/100[v]" -map "[v]" -c:v libx264 output.mov
+
+	// 今何を行なっているかを画面上部h1タグで表示して、収録後の編集を簡単にする
+
+	// 現在時刻を常に表示する機能の関数
+	function get_time() {
+		const date = new Date();
+		const time = date.toLocaleTimeString();
+		const date_time = date.toLocaleDateString() + ' ' + time;
+		return date_time
+	}
+
+
 	// e2eのテストコード作る
 	// app4形式のUIにする
 	// authの部分をtest_modeがfalseの時にfirebaseに変更
@@ -465,11 +481,13 @@
 	
 	$: (async () => {
 		// inputタグにバインドされたデータは、inputタグの値が変更されるたびに更新される
+		get_time();
 	
 	
 	})();
 	
 	onMount(async () => {
+		get_time();
 		await fetch_get_all_descs_and_tags();
 		await auth_check_login();
 	
@@ -529,6 +547,9 @@
 <div class="container">
 
 <div class="header">
+	<h1>現在日時と時刻:
+		{get_time()}
+	</h1>
 	<div>auth_login_result: <span>{auth_login_result}</span></div>
 	<div>auth_google_login: <button on:click={auth_google_login}>auth_google_login</button></div>
 		<!-- fetch_init_db() {
